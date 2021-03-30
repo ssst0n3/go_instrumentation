@@ -28,8 +28,12 @@ func NewTrace() *Trace {
 
 func GetParamsFromFuncDecl(funcDecl *dst.FuncDecl) (params []string) {
 	for _, param := range funcDecl.Type.Params.List {
-		if len(param.Names) > 0 && param.Names[0].String() != "_" {
-			params = append(params, param.Names[0].String())
+		if len(param.Names) > 0 {
+			for _, name := range param.Names {
+				if name.String() != "_" {
+					params = append(params, name.String())
+				}
+			}
 		}
 	}
 	return
@@ -74,6 +78,7 @@ import (
 
 func __stmt() {.left}
 	logger := instrument_log.New()
+	logger.SetReportCaller(true)
 	file, _ := instrument_os.OpenFile("/tmp/instrumentation", instrument_os.O_CREATE|instrument_os.O_WRONLY|instrument_os.O_APPEND, 0644)
 	logger.SetOutput(file)
 	logger.Infof("{.format}",{.args})

@@ -73,3 +73,20 @@ func TestBuildImportPkg(t *testing.T) {
 		log.Logger.Info(binaryPath)
 	}
 }
+
+func TestParseFile(t *testing.T)  {
+	source := `package stmt
+import (
+	"fmt"
+)
+
+func checkProcMount(rootfs, dest, source string) error {
+	fmt.Printf("%s, %s, %s", rootfs, dest, source)
+}`
+	parse, err := decorator.ParseFile(token.NewFileSet(), "src.go", source, parser.ParseComments)
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	spew.Dump(parse)
+}
